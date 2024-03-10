@@ -10,7 +10,6 @@
 
 import json
 import os
-from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -29,3 +28,43 @@ class FileStorage:
     def all(self):
         """returns the dictionary __objects"""
         return self.__class__.__objects
+
+    def new(self, obj):
+        """sets in __objects the obj with key <obj class name>.id
+
+        Arguments:
+            - obj: the instance to add to __objects
+
+        """
+
+        self.__class__.__objects["{}.{}".format(
+            obj.__class__.__name__, obj.id
+        )] = obj
+
+    def save(self):
+        """ serializes __objects to the JSON file (path: __file_path)"""
+
+        with open(self.__class__.__file_path, "w", encoding='utf-8') as f:
+            # first convert obj to dictionary
+            obj_dict_repr = {}
+            for ids, value in self.__class__.__objects.items():
+                obj_dict_repr[ids] = value.to_dict()
+
+            json.dump(obj_dict_repr, f)
+
+    def reload(self):
+        """deserializes the JSON file to __objects
+        only if the JSON file exist"""
+        from models.base_model import BaseModel
+
+        file_exist = os.path.exists(self.__class__.__file_path)
+
+        if file_exist:
+            with open(self.__class__.__file_path, "r", encoding='utf-8') as f:
+
+                obj_dict_repr = json.load(f)
+
+                # converts the dictionary to object
+                # that can be stored in __objects
+                for key, dictionary in obj_dict_repr.items():
+                    self.__class__.__objects[key] = BaseModel(**dictionary)

@@ -10,6 +10,7 @@
 
 import uuid
 from datetime import datetime
+from models import storage
 
 
 class BaseModel:
@@ -28,16 +29,9 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
 
-        # I'm doing the below import to avoid circular imports
-        # that is FileStorage -> BaseModel and BaseModel -> FileStorage
-        #from .__init__ import storage
-        
-        #self.__class__.__objects = storage.all()
         # gets the dictionary representation of all objects
-        #obj_dict_repr = [x.to_dict() for x in storage.all().values()]
-        #if kwargs:
-            # if it's a new instance
-            #print("yes")
+        obj_dict_repr = [x.to_dict() for x in storage.all().values()]
+
         if kwargs is not None and kwargs != {}:
             for key, value in kwargs.items():
                 if key == "id":
@@ -54,20 +48,15 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = self.created_at
 
-            #print("this is self before calling new", self)
-            #storage.new(self)
-            #print("this is self after calling new", self)
+        if kwargs not in obj_dict_repr:
+            storage.new(self)
 
     def save(self):
         """updates the public instance attribute updated_at
         with the current datetime"""
 
-        # I'm doing the below import to avoid circular imports
-        # that is FileStorage -> BaseModel and BaseModel -> FileStorage
-        #from .__init__ import storage
-
         self.updated_at = datetime.now()
-        #storage.save()
+        storage.save()
 
     def to_dict(self):
         """returns a dictionary containing all keys/values
