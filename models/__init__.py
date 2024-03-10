@@ -1,4 +1,4 @@
-from models.engine.file_storage import FileStorage
+#from models.engine.file_storage import FileStorage
 
-storage = FileStorage()  # creates a file storage
-storage.reload()  # deserializes the JSON file to __objects
+#storage = FileStorage()  # creates a file storage
+#storage.reload()  # deserializes the JSON file to __objects
