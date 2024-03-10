@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """console.py
 
     contains the entry point of the command interpreter
@@ -9,35 +10,40 @@
 """
 
 import cmd
-import BaseModel
+from models.base_model import BaseModel
 
 class HBNBCommand(cmd.Cmd):
     """entry point of the command interpreter"""
 
     prompt = "(hbnb) "
-    def postloop(self):
-        print()
+
+    def do_emptyline():
+        pass
 
     def do_quit(self, arg):
-        """Quit command to exit the program"""
+        """Quit command to exit the program
+
+        """
         return True
 
     def do_EOF(self, arg):
-        """Quit command to exit the program"""
+        """Quit command to exit the program
+
+        """
         return True
 
-    def do_create(self, class_name):
-        """Creates a new instance of BaseModel
+"""    def do_create(self, class_name):
+        Creates a new instance of BaseModel
         saves it (to the JSON file) and prints the id
 
         Args:
             class_name: name of the class to create an instance from
 
-        """
+        
 
         if !isinstance(class_name, object):
             print("** class doesn't exist **")
-        elif class_name != "":
+        elif class_name:
             instance = class_name()
             instance.save()
             print(instance.id)
@@ -45,18 +51,20 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def do_show(self, class_name, object_id):
-        """Prints the string representation of an instance
+        Prints the string representation of an instance
         based on the class name and id
 
         Args:
             class_name: name of the class to create an instance from
             object_id: the id of the instance
 
-        """
+        
         if !isinstance(class_name, object):
             print("** class doesn't exist **")
-        elif class_name != "" and object_id != "":
-            print
+        elif class_name:
+            instance = class_name()
+            instance.save()
+            print(instance.id)
         else:
             print("** class name missing **")
 
@@ -70,7 +78,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, class_name, object_id, attr_name, value):
         # implement
-        pass
+        pass"""
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
