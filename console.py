@@ -125,6 +125,17 @@ class HBNBCommand(cmd.Cmd):
             del storage.all()[f'{cls_name}.{idx}']
             storage.save()
 
+    def do_all(self, arg):
+        """Prints all string representation of all instances
+        based or not on the class name
+
+        Args:
+           - arg: command line args passed to interpreter
+
+        """
+
+        if
+
         except KeyError:
             print("** no instance found **")
 if __name__ == '__main__':
