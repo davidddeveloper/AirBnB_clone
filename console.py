@@ -36,6 +36,40 @@ class HBNBCommand(cmd.Cmd):
 
     # command interpreter
 
+    # reusable function
+    @classmethod
+    def check(cls, arg):
+        """perfroms checks for do_show, do_destroy and do_all
+
+        Args:
+            - arg: the string to perform check on
+
+        """
+
+        args = arg.split()
+        if arg == "":
+            print("** class name missing **")
+            return
+
+        if len(args) == 1:
+            cls_name = args[0]
+            print("** instance id missing **")
+            return
+
+        if len(args) > 1:
+            cls_name = args[0]
+            idx = args[1]
+
+        if cls_name == "":
+            print("** class name missing **")
+            return
+
+        if cls_name != "BaseModel":
+            print("** class doesn't exist **")
+            return
+
+        return [cls_name, idx]
+
     def do_create(self, cls_name):
         """creates a new instance of BaseModel,
         saves it (to the JSON file) and prints the id
@@ -50,13 +84,12 @@ class HBNBCommand(cmd.Cmd):
         elif cls_name != "BaseModel":
             print("** class doesn't exist **")
 
-        else: # cls_name is not empty and is an actual class
+        else:  # cls_name is not empty and is an actual class
             # creates a new instance
             new = BaseModel()
             storage.new(new)
             # saves it to the JSON file
             storage.save()
-            print(new.id)
 
     def do_show(self, arg):
         """Prints the string representation of an instance
@@ -66,26 +99,11 @@ class HBNBCommand(cmd.Cmd):
             - arg: arguments passed to the interpreter
 
         """
-        args = arg.split()
-        if arg == "":
-            print("** class name missing **")
-            return
 
-        if len(args) == 1:
-            cls_name = args[0]
-            print("** instance id missing **")
-            return
-
-        if len(args) > 1:
-            cls_name = args[0]
-            idx = args[1]
-
-        if cls_name == "":
-            print("** class name missing **")
-            return
-
-        if cls_name != "BaseModel":
-            print("** class doesn't exist **")
+        output = HBNBCommand.check(arg)  # perform checks
+        if output is not None:  # get the class name and id
+            cls_name, idx = output
+        else:
             return
 
         try:
@@ -98,32 +116,19 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id
         (save the change into the JSON file)"""
-        args = arg.split()
-    
-        if arg == "":
-            print("** class name missing **")
-            return
 
-        if len(args) == 1:
-            cls_name = args[0]
-            print("** instance id missing **")
-            return
-
-        if len(args) > 1:
-            cls_name = args[0]
-            idx = args[1]
-
-        if cls_name == "":
-            print("** class name missing **")
-            return
-
-        if cls_name != "BaseModel":
-            print("** class doesn't exist **")
+        output = HBNBCommand.check(arg)  # perform checks
+        if output is not None:  # get the class name and id
+            cls_name, idx = output
+        else:
             return
 
         try:
             del storage.all()[f'{cls_name}.{idx}']
             storage.save()
+
+        except KeyError:
+            print("** no instance found **")
 
     def do_all(self, arg):
         """Prints all string representation of all instances
@@ -134,9 +139,45 @@ class HBNBCommand(cmd.Cmd):
 
         """
 
-        if
+        if arg != "" and arg != "BaseModel":
+            print("** class doesn't exist **")
+        else:
+            objects = storage.all().values()
+            print([f'{str(obj)}' for obj in objects])
 
+    def do_update(self, arg):
+        """Updates an instance based on the class name and id
+        by adding or updating attribute (save the change into the JSON file)
+
+        Arg:
+            - arg: command line args passed to interpreter
+
+        """
+
+        output = HBNBCommand.check(arg)  # perform checks
+        if output is not None:  # get the class name and id
+            cls_name, idx = output
+        else:
+            return
+
+        args = arg.split()
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+
+        if len(args) < 4:
+            print("** value missing **")
+            return
+
+        attr_name = args[2]
+        attr_value = args[3]
+
+        try:
+            instance = storage.all()[f'{cls_name}.{idx}']
+            setattr(instance, attr_name, attr_value)
         except KeyError:
             print("** no instance found **")
+
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

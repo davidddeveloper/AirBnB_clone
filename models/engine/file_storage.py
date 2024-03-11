@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """file_storage.py
 
     This module contains classes related to file storage with json file

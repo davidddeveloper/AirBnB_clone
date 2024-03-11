@@ -71,7 +71,7 @@ class TestBase(unittest.TestCase):
         current_updated_date = TestBase.model1.updated_at
 
         # updated model
-        TestBase.model1.id = uuid.uuid4()
+        TestBase.model1.id = str(uuid.uuid4())
         TestBase.model1.save()  # updated updated_at
 
         self.assertNotEqual(current_updated_date, TestBase.model1.updated_at)

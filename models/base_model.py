@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """base_model.py
 
     This modules contains definitions of all common attributes and method
@@ -49,6 +50,7 @@ class BaseModel:
             self.updated_at = self.created_at
 
         if kwargs not in obj_dict_repr:
+            # if its a new instance
             storage.new(self)
 
     def save(self):
@@ -74,4 +76,5 @@ class BaseModel:
         return dictionary
 
     def __str__(self):
+        """represents a unofficial string representation of the object"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
