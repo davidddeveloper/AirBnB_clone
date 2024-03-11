@@ -122,8 +122,8 @@ class HBNBCommand(cmd.Cmd):
             return
 
         try:
-            instance = storage.all()[f'{cls_name}.{idx}']
-            del instance
+            del storage.all()[f'{cls_name}.{idx}']
+            storage.save()
 
         except KeyError:
             print("** no instance found **")
