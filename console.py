@@ -175,6 +175,8 @@ class HBNBCommand(cmd.Cmd):
         try:
             instance = storage.all()[f'{cls_name}.{idx}']
             setattr(instance, attr_name, attr_value)
+            storage.save()
+
         except KeyError:
             print("** no instance found **")
 
