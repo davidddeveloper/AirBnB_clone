@@ -95,7 +95,7 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
 
-    def do_destroy(self, args):
+    def do_destroy(self, arg):
         """Deletes an instance based on the class name and id
         (save the change into the JSON file)"""
         args = arg.split()
