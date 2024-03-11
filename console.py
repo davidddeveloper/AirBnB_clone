@@ -63,8 +63,7 @@ class HBNBCommand(cmd.Cmd):
         based on the class name and id
 
         Args:
-            - cls_name: name of the class to create a new instance from
-            - id: represents the instance to print informations about
+            - arg: arguments passed to the interpreter
 
         """
         args = arg.split()
@@ -96,5 +95,8 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** no instance found **")
 
+    def do_destroy(self, BaseModel, idx):
+        """Deletes an instance based on the class name and id
+        (save the change into the JSON file)"""
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
