@@ -12,6 +12,9 @@
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
+
+class_names = ["BaseModel", "User"]
 
 
 def check(arg):
@@ -40,7 +43,7 @@ def check(arg):
         print("** class name missing **")
         return
 
-    if cls_name != "BaseModel":
+    if cls_name not in class_names:
         print("** class doesn't exist **")
         return
 
@@ -51,6 +54,8 @@ class HBNBCommand(cmd.Cmd):
     """entry point of the command interpreter"""
 
     prompt = "(hbnb) "
+
+    __class_names = class_names
 
     def emptyline(self):
         pass
@@ -80,15 +85,22 @@ class HBNBCommand(cmd.Cmd):
         if cls_name == "":
             print("** class name missing **")
 
-        elif cls_name != "BaseModel":
+        elif cls_name not in HBNBCommand.__class_names:
             print("** class doesn't exist **")
 
-        else:  # cls_name is not empty and is an actual class
+        elif cls_name == "BaseModel":
             # creates a new instance
             new = BaseModel()
             storage.new(new)
             # saves it to the JSON file
             storage.save()
+            # print id
+            print(new.id)
+
+        elif cls_name == "User":
+            new = User()
+            storage.new(new)
+
             # print id
             print(new.id)
 

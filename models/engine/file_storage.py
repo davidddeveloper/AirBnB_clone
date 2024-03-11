@@ -55,8 +55,13 @@ class FileStorage:
 
     def reload(self):
         """deserializes the JSON file to __objects
-        only if the JSON file exist"""
+        only if the JSON file exist
+
+        I'm doing the imports below to avoid circular imports
+
+        """
         from models.base_model import BaseModel
+        from models.user import User
 
         file_exist = os.path.exists(self.__class__.__file_path)
 
@@ -68,4 +73,9 @@ class FileStorage:
                 # converts the dictionary to object
                 # that can be stored in __objects
                 for key, dictionary in obj_dict_repr.items():
-                    self.__class__.__objects[key] = BaseModel(**dictionary)
+                    cls_name = dictionary["__class__"]
+
+                    if cls_name == "BaseModel":
+                        self.__class__.__objects[key] = BaseModel(**dictionary)
+                    elif cls_name == "User":
+                        self.__class__.__objects[key] = User(**dictionary)
