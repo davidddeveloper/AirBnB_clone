@@ -152,7 +152,7 @@ class HBNBCommand(cmd.Cmd):
 
         """
 
-        if arg != "" and arg != "BaseModel":
+        if arg != "" and arg not in HBNBCommand.__class_names:
             print("** class doesn't exist **")
         else:
             objects = storage.all().values()
