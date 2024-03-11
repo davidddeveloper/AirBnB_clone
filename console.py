@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """console.py
 
     contains the entry point of the command interpreter
@@ -12,6 +12,39 @@
 import cmd
 from models import storage
 from models.base_model import BaseModel
+
+
+def check(arg):
+    """perfroms checks for do_show, do_destroy and do_all
+
+    Args:
+        - arg: the string to perform check on
+
+    """
+
+    args = arg.split()
+    if arg == "":
+        print("** class name missing **")
+        return
+
+    if len(args) == 1:
+        cls_name = args[0]
+        print("** instance id missing **")
+        return
+
+    if len(args) > 1:
+        cls_name = args[0]
+        idx = args[1]
+
+    if cls_name == "":
+        print("** class name missing **")
+        return
+
+    if cls_name != "BaseModel":
+        print("** class doesn't exist **")
+        return
+
+    return [cls_name, idx]
 
 
 class HBNBCommand(cmd.Cmd):
@@ -36,40 +69,6 @@ class HBNBCommand(cmd.Cmd):
 
     # command interpreter
 
-    # reusable function
-    @classmethod
-    def check(cls, arg):
-        """perfroms checks for do_show, do_destroy and do_all
-
-        Args:
-            - arg: the string to perform check on
-
-        """
-
-        args = arg.split()
-        if arg == "":
-            print("** class name missing **")
-            return
-
-        if len(args) == 1:
-            cls_name = args[0]
-            print("** instance id missing **")
-            return
-
-        if len(args) > 1:
-            cls_name = args[0]
-            idx = args[1]
-
-        if cls_name == "":
-            print("** class name missing **")
-            return
-
-        if cls_name != "BaseModel":
-            print("** class doesn't exist **")
-            return
-
-        return [cls_name, idx]
-
     def do_create(self, cls_name):
         """creates a new instance of BaseModel,
         saves it (to the JSON file) and prints the id
@@ -90,6 +89,8 @@ class HBNBCommand(cmd.Cmd):
             storage.new(new)
             # saves it to the JSON file
             storage.save()
+            # print id
+            print(new.id)
 
     def do_show(self, arg):
         """Prints the string representation of an instance
@@ -100,7 +101,7 @@ class HBNBCommand(cmd.Cmd):
 
         """
 
-        output = HBNBCommand.check(arg)  # perform checks
+        output = check(arg)  # perform checks
         if output is not None:  # get the class name and id
             cls_name, idx = output
         else:
@@ -117,7 +118,7 @@ class HBNBCommand(cmd.Cmd):
         """Deletes an instance based on the class name and id
         (save the change into the JSON file)"""
 
-        output = HBNBCommand.check(arg)  # perform checks
+        output = check(arg)  # perform checks
         if output is not None:  # get the class name and id
             cls_name, idx = output
         else:
