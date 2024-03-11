@@ -155,7 +155,7 @@ class HBNBCommand(cmd.Cmd):
 
         """
 
-        output = HBNBCommand.check(arg)  # perform checks
+        output = check(arg)  # perform checks
         if output is not None:  # get the class name and id
             cls_name, idx = output
         else:
