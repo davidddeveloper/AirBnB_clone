@@ -4,10 +4,13 @@
 """
 
 import unittest
-from models import *
+from models.place import Place
+from models.city import City
+from models.user import User
+from models.amenity import Amenity
 
 
-class TestPlace.unittest.TestCase):
+class TestPlace(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         TestPlace.place = Place()
@@ -40,7 +43,7 @@ class TestPlace.unittest.TestCase):
 
     def test_amenity_ids(self):
         amenity1 = Amenity()
-        Amenity2 = Amenity()
+        amenity2 = Amenity()
         ids = [amenity1.id, amenity2.id]
         self.assertEqual(TestPlace.place.amenity_ids, [])
         TestPlace.place.amenity_ids = ids
@@ -112,4 +115,3 @@ class TestPlace.unittest.TestCase):
 
         # edge cases
         self.assertEqual(type(TestPlace.place.longitude), float)
-

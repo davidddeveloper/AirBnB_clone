@@ -4,14 +4,15 @@
 """
 
 import unittest
-from models import State
+from models.state import State
+
 
 class TestState(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        TestCity.state = State()
+        TestState.state = State()
 
     def test_name(self):
-        self.assertEqual(TestCity.state.name, "")
-        TestCity.state.name = "Alabama"
-        self.assertEqual(TestCity.state.name, "Alabama")
+        self.assertEqual(TestState.state.name, "")
+        TestState.state.name = "Alabama"
+        self.assertEqual(TestState.state.name, "Alabama")

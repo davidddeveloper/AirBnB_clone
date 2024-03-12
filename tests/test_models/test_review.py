@@ -4,7 +4,10 @@
 """
 
 import unittest
-from models import Review, Place, User
+from models.review import Review
+from models.place import Place
+from models.user import User
+
 
 class TestReview(unittest.TestCase):
     @classmethod
@@ -12,9 +15,9 @@ class TestReview(unittest.TestCase):
         TestReview.review = Review()
 
     def test_text(self):
-        self.assertEqual(TestReview.state.name, "")
-        TestReview.state.name = "Beautiful place"
-        self.assertEqual(TestReview.state.name, "Beautiful place")
+        self.assertEqual(TestReview.review.text, "")
+        TestReview.review.text = "Beautiful place"
+        self.assertEqual(TestReview.review.text, "Beautiful place")
 
     def test_place_id(self):
         place = Place()
@@ -25,5 +28,5 @@ class TestReview(unittest.TestCase):
     def test_user_id(self):
         user = User()
         self.assertEqual(TestReview.review.user_id, "")
-        TestReview.review.user_id = place.id
-        self.assertEqual(TestReview.review.user_id, place.id)
+        TestReview.review.user_id = user.id
+        self.assertEqual(TestReview.review.user_id, user.id)

@@ -59,7 +59,7 @@ class TestBase(unittest.TestCase):
     def test_updated_at(self):
         self.assertEqual(TestBase.model2.updated_at, TestBase.model2.created_at)
         # update model
-        TestBase.model2.id = uuid.uuid4()
+        TestBase.model2.id = str(uuid.uuid4())
         self.assertNotEqual(TestBase.model2.updated_at, None, "should be true")
 
     def test__str__(self):

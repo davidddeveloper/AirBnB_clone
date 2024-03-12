@@ -4,7 +4,8 @@
 """
 
 import unittest
-from models import State, City
+from models.state import State
+from models.city import City
 
 class TestCity(unittest.TestCase):
     @classmethod
@@ -18,6 +19,6 @@ class TestCity(unittest.TestCase):
 
     def test_state_id(self):
         state = State()
-        self.assertEqual(TestCity.city.state_id, "")
-        TestCity.city.state_id = state.id
-        self.assertEqual(TestCity.city.state_id, state.id)
+        self.assertEqual(City.state_id, "")
+        State.state_id = state.id
+        self.assertEqual(State.state_id, state.id)
