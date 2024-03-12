@@ -227,7 +227,7 @@ class HBNBCommand(cmd.Cmd):
 
             if command == "count":  # counts of all objects
                 print(len(storage.all()))
-                return
+                return None
             return cmd.Cmd.onecmd(self, actual_command)
 
         # to catch user.all("abcd") or similar
@@ -289,14 +289,14 @@ class HBNBCommand(cmd.Cmd):
 
                     instance = all_objs[idx]
                 except KeyError:
-                    return
+                    return None
 
                 if instance:
                     for key, value in dictionary.items():
                         setattr(instance, key, value)
 
                     instance.save()
-                    return
+                    return None
 
             else:
                 actual_command = actual_command + f" {idx}"
