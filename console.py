@@ -11,10 +11,17 @@
 
 import cmd
 from models import storage
+from models.city import City
+from models.state import State
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 from models.base_model import BaseModel
 from models.user import User
 
-class_names = ["BaseModel", "User"]
+class_names = [
+        "BaseModel", "User", "City", "State", "Place", "Amenity", "Review"
+]
 
 
 def check(arg):
@@ -56,6 +63,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     __class_names = class_names
+    classes = [BaseModel, User, State, Place, City, Amenity, Review]
 
     def emptyline(self):
         pass
@@ -88,21 +96,22 @@ class HBNBCommand(cmd.Cmd):
         elif cls_name not in HBNBCommand.__class_names:
             print("** class doesn't exist **")
 
-        elif cls_name == "BaseModel":
-            # creates a new instance
-            new = BaseModel()
-            storage.new(new)
-            # saves it to the JSON file
-            storage.save()
-            # print id
-            print(new.id)
-
-        elif cls_name == "User":
-            new = User()
-            storage.new(new)
-
-            # print id
-            print(new.id)
+        else:
+            for i in range(len(HBNBCommand.classes)):
+                # find the class to create an instance from
+                # I'm doing this so I don't end up with
+                # bounch of if checks for every class
+                if cls_name == HBNBCommand.classes[i].__name__:
+                    # class to create instance from
+                    the_class = HBNBCommand.classes[i]
+                    # creates a new instance
+                    new = the_class()
+                    storage.new(new)
+                    # saves it to the JSON file
+                    storage.save()
+                    # print the id
+                    print(new.id)
+                    break
 
     def do_show(self, arg):
         """Prints the string representation of an instance

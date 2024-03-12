@@ -62,6 +62,21 @@ class FileStorage:
         """
         from models.base_model import BaseModel
         from models.user import User
+        from models.place import Place
+        from models.city import City
+        from models.state import State
+        from models.amenity import Amenity
+        from models.review import Review
+
+        __classes = [
+            BaseModel,
+            User,
+            Place,
+            State,
+            City,
+            Amenity,
+            Review
+        ]
 
         file_exist = os.path.exists(self.__class__.__file_path)
 
@@ -75,7 +90,11 @@ class FileStorage:
                 for key, dictionary in obj_dict_repr.items():
                     cls_name = dictionary["__class__"]
 
-                    if cls_name == "BaseModel":
-                        self.__class__.__objects[key] = BaseModel(**dictionary)
-                    elif cls_name == "User":
-                        self.__class__.__objects[key] = User(**dictionary)
+                    for i in range(len(__classes)):
+                        # get the class we want to create instance from
+                        # I'm doing this so I don't end up with
+                        # bounch of if checks for every class
+                        if cls_name == __classes[i].__name__:
+                            cls = __classes[i]
+                            # create an instance from that class
+                            self.__class__.__objects[key] = cls(**dictionary)

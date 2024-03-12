@@ -10,7 +10,7 @@
 from models.base_model import BaseModel
 
 
-class State(BaseModel):
+class Place(BaseModel):
     """Represents a country place"""
 
     city_id = ""
