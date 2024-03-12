@@ -77,7 +77,7 @@ class TestUser(unittest.TestCase):
         self.assertNotEqual(current_updated_date, TestUser.model1.updated_at)
 
     def test_to_dict(self):
-        model3 = BaseModel()
+        model3 = User()
         expected_output = model3.__dict__['created_at']
         expected_output = expected_output.isoformat()
 
