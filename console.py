@@ -9,6 +9,7 @@
 
 """
 
+import re
 import cmd
 from models import storage
 from models.city import City
@@ -201,6 +202,108 @@ class HBNBCommand(cmd.Cmd):
 
         except KeyError:
             print("** no instance found **")
+
+    def onecmd(self, s):
+        """partially overwritting onecmd so we will be able to
+            do the following in the console:
+
+            User.all()  ------>  all User
+            User.show("123456689")  ------>  show User 123456789
+            User.destroy("123456789")  ----->  destroy User 123456789
+            User.update("12345", "name", "John")  ----> update 1234 name John
+
+        and also to perfrom User.count()
+
+        """
+
+        # to catch User.all() or simlar
+        pattern_one = r'([A-Z][a-zA-z]*).([a-z]*)\(\)'
+        if re.match(pattern_one, s):
+            # ex: extract all and User from User.all()
+            model, command = s.split(".")
+            command = command[0:-2]  # exclude brackes
+
+            actual_command = f"{command} {model}"  # ex: all User
+
+            if command == "count":  # counts of all objects
+                print(len(storage.all()))
+                return
+            return cmd.Cmd.onecmd(self, actual_command)
+
+        # to catch user.all("abcd") or similar
+        pattern_two = r'([A-Z][a-zA-z]*)\.(\w[a-z]*)(\(("|\')\w([A-z]'
+        pattern_two = pattern_two + r'|[0-9]|-)*("|\')((,\s*("|\')\w([A-z]'
+        pattern_two = pattern_two + r'|[0-9]|-)*("|\'))|(,\s*\{.*\}))*\))'
+
+        if re.match(pattern_two, s):
+            # ex: extract all and User from User.all("12345")
+            model, command = s.split(".")
+
+            # ex: extract "1234" from all("1234")
+            matches = re.finditer(r'("|\')(\w|[-])*("|\')', command)
+            args = [m.group(0)[1:-1] for m in matches]  # get the arguments
+            command, _ = command.split("(")  # extract word excluding brackets
+
+            idx = args[0]
+            actual_command = f"{command} {model}"
+
+            # update using dictionary
+            try:
+                # extract dictionary
+                pattern = re.compile(r'\{.*\}')
+                dictionary_str = pattern.search(s).group()
+                dictionary = eval(dictionary_str)
+
+            except IndexError:
+                dictionary = None
+
+            except Exception:
+                dictionary = None
+
+            if command == "update" and dictionary is None:
+                try:
+                    attr_name = args[1]
+                    actual_command = f"{command} {model} {idx} {attr_name}"
+                except IndexError:
+                    return cmd.Cmd.onecmd(self, actual_command)
+
+                try:
+                    attr_name = args[1]
+                    attr_value = args[2]
+                    actual_command = f"{command} {model} {idx} {attr_name}"
+                    actual_command = actual_command + f" {attr_value}"
+                except IndexError:
+                    return cmd.Cmd.onecmd(self, actual_command)
+
+            elif command == "update" and dictionary is not None:
+                try:
+                    # recreate the objects changing the key
+                    # BaseModel.id to just id
+                    all_objs = {}
+                    objects_keys = list(storage.all().keys())
+                    objects_values = list(storage.all().values())
+                    for i in range(len(objects_keys)):
+                        all_objs[
+                                objects_keys[i].split(".")[1]
+                        ] = objects_values[i]
+
+                    instance = all_objs[idx]
+                except KeyError:
+                    return
+
+                if instance:
+                    for key, value in dictionary.items():
+                        setattr(instance, key, value)
+
+                    instance.save()
+                    return
+
+            else:
+                actual_command = actual_command + f" {idx}"
+
+            return cmd.Cmd.onecmd(self, actual_command)
+
+        return cmd.Cmd.onecmd(self, s)
 
 
 if __name__ == '__main__':
