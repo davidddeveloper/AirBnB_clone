@@ -4,4 +4,11 @@
     font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
     color: #484848;
+    box-sizing: border-box;
+}
+
+@media (max-width: 800px) {
+    .container {
+        padding: 20px;
+    }
 }

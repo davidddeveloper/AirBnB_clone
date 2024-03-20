@@ -6,20 +6,30 @@
     flex-direction: column;
 }
 
-h3,
-h4 {
+.locations h3,
+.locations h4 {
     margin-left: 30px;
     
 }
 
-h3 {
+.locations h3 {
     font-weight: 600;
     margin-top: 20px;
     
 }
 
-h4 {
+.locations h4 {
     font-weight: 400;
     font-size: 14px;
     margin-bottom: 20px;
+}
+
+@media (max-width: 700px) {
+    .filters .locations {
+        display: none;
+    }
+    .filters .locations:first-of-type {
+        display: block;
+        width: 50%;
+    }   
 }
