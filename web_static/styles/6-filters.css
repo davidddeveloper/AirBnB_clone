@@ -4,14 +4,14 @@
 
 .popover {
     color: #FAFAFA;
-    background-color: rgba(211, 211, 211, 0.092);
+    background-color: rgb(249, 249, 249);
     width: 100%;
     border: 1px solid #DDD;
     border-radius: 4px;
     box-sizing: border-box;
-    /*display: none;*/
+    display: none;
     padding-inline: 15px;
-    align-self: flex-end;
+    align-self: flex-end; 
 }
 
 .locations:hover ul {
